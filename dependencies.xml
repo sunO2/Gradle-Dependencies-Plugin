@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dependencies>
 
+
+
+
 <!--    &lt;!&ndash;    gradle组件&ndash;&gt;-->
     <group group="com.hezhihu.gradle.plugin" id="gradle_plugin" path="gradle_plugin" version="1.0.0">
         <module id="applyMaven" path="applyMaven"/>
@@ -9,24 +12,24 @@
     </group>
 
 <!--    &lt;!&ndash;    功能模块组件 &ndash;&gt;-->
-<!--    <group group="com.hezhihu.module" id="modules" path="modules" version="1.0.0">-->
-<!--        <module id="libA" path="libA"/>-->
-<!--        <module id="libB" path="libB"/>-->
-<!--        <module id="libC" path="libC"/>-->
-<!--        <module id="libD" path="libD"/>-->
-<!--        <module id="libE" path="libE"/>-->
-<!--        <module id="rxjava" path="rxjava"/>-->
-<!--    </group>-->
+    <group group="com.hezhihu.module" id="modules" path="modules" version="1.0.0">
+        <module id="libA" path="libA"/>
+        <module id="libB" path="libB"/>
+        <module id="libC" path="libC"/>
+        <module id="libD" path="libD"/>
+        <module id="libE" path="libE"/>
+        <module id="rxjava" path="rxjava"/>
+    </group>
 
 <!--    &lt;!&ndash;    对外开放组件 &ndash;&gt;-->
-<!--    <group group="com.hezhihu.frameworks" id="frameworks" path="frameworks" version="1.0.0">-->
-<!--        <module id="network" path="network"/>-->
-<!--        <module id="user" path="user"/>-->
-<!--    </group>-->
+    <group group="com.hezhihu.frameworks" id="frameworks" path="frameworks" version="1.0.0">
+        <module id="network" path="network"/>
+        <module id="user" path="user"/>
+    </group>
 
 <!--&lt;!&ndash;        服务功能模块 &ndash;&gt;-->
-<!--    <group group="com.hezhihu.service" id="service" path="service" version="1.0.0">-->
-<!--        <module id="finger" path="finger"/>-->
-<!--    </group>-->
+    <group group="com.hezhihu.service" id="service" path="service" version="1.0.0">
+
+    </group>
 
 </dependencies>

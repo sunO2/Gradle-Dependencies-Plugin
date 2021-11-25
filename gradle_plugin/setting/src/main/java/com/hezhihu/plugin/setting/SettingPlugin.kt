@@ -119,10 +119,6 @@ class SettingPlugin: Plugin<Settings>{
                 }
             }
 
-
-
-
-
             fun createGradleFile(){
 
             }

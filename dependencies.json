@@ -1,0 +1,42 @@
+{
+  "app": {
+    "host": {
+      "path": "./app"
+    },
+    "content": [
+      {
+        "path": "modules",
+        "version": "1.0.0",
+        "groupId": "com.hezhihu.module",
+        "dependencies": [
+          "com.hezhihu.frameworks:frameworks:1.0.0"
+        ],
+        "modules": [
+          {
+            "id": "HomeModule",
+            "path": "home"
+          },
+          {
+            "id": "LoginModule",
+            "path": "login"
+          },
+          {
+            "id": "SettingModule",
+            "path": "login"
+          },
+          {
+            "id": "LauncherModule",
+            "path": "launcher"
+          }
+        ]
+      },{
+        "path": "frameworks",
+        "version": "1.0.0",
+        "groupId": "com.hezhihu.frameworks",
+        "module": {
+
+        }
+      }
+    ]
+  }
+}
