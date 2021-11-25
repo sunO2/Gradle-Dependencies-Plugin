@@ -1,0 +1,43 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'plugin.apply.maven'
+
+apply plugin: 'plugin.apply.dependencies'
+dependenciesConfig {
+    dependenciesXml file("dependencies.xml")
+}
+
+
+buildscript {
+    ext.kotlin_version = "1.3.72"
+    repositories {
+        maven {url rootProject.file("maven/m2")}
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.hezhihu.gradle.plugin:apply-maven:1.0.0'
+        classpath 'com.hezhihu.gradle.plugin:dependencies:1.0.0'
+
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
+    }
+}
+
+allprojects {
+    repositories {
+        maven {url rootProject.file("maven/m2")}
+        mavenLocal()
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+

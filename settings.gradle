@@ -1,0 +1,16 @@
+rootProject.name = "TestDemo"
+include ':app'
+
+buildscript{
+    repositories {
+        maven {url new File(rootDir,"maven/m2")}
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies{
+        classpath 'com.hezhihu.gradle.plugin:setting:1.0.0'
+    }
+}
+apply plugin: 'plugin.apply.setting'
+
