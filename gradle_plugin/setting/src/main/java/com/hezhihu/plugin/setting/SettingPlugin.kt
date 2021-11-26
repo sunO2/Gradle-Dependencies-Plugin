@@ -1,7 +1,6 @@
 package com.hezhihu.plugin.setting
 
-import freemarker.cache.ByteArrayTemplateLoader
-import freemarker.template.Configuration
+import com.google.gson.Gson
 import freemarker.template.Template
 import groovy.util.Node
 import groovy.util.XmlParser
@@ -14,6 +13,12 @@ class SettingPlugin: Plugin<Settings>{
 
     override fun apply(settings: Settings) {
         settings.run {
+
+            FileReader(File(rootDir,"dependencies.json")).readText().run {
+                val app = Gson().fromJson(this,APPFramework::class.java)
+                app.app.framework[0].dependencies.dependencies()
+            }
+
             XmlParser().parse(getDependenciesFile()).run {
                 children().forEach { group ->
                     if(group is Node){

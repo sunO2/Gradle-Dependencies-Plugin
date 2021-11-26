@@ -2,8 +2,6 @@
 <dependencies>
 
 
-
-
 <!--    &lt;!&ndash;    gradle组件&ndash;&gt;-->
     <group group="com.hezhihu.gradle.plugin" id="gradle_plugin" path="gradle_plugin" version="1.0.0">
         <module id="applyMaven" path="applyMaven"/>
@@ -11,7 +9,7 @@
         <module id="setting" path="setting"/>
     </group>
 
-<!--    &lt;!&ndash;    功能模块组件 &ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash;    功能模块组件 &ndash;&gt;&ndash;&gt;-->
     <group group="com.hezhihu.module" id="modules" path="modules" version="1.0.0">
         <module id="libA" path="libA"/>
         <module id="libB" path="libB"/>
@@ -27,7 +25,7 @@
         <module id="user" path="user"/>
     </group>
 
-<!--&lt;!&ndash;        服务功能模块 &ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        服务功能模块 &ndash;&gt;&ndash;&gt;-->
     <group group="com.hezhihu.service" id="service" path="service" version="1.0.0">
 
     </group>
