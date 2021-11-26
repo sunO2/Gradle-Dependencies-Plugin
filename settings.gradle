@@ -13,4 +13,5 @@ buildscript{
     }
 }
 apply plugin: 'plugin.apply.setting'
+//include ':gradle_plugin:setting'
 
