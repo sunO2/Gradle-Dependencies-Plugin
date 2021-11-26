@@ -13,19 +13,19 @@
         ],
         "modules": [
           {
-            "id": "HomeModule",
+            "id": "homemodule",
             "path": "home"
           },
           {
-            "id": "LoginModule",
+            "id": "loginmodule",
             "path": "login"
           },
           {
-            "id": "SettingModule",
-            "path": "login"
+            "id": "settingmodule",
+            "path": "setting"
           },
           {
-            "id": "LauncherModule",
+            "id": "launchermodule",
             "path": "launcher"
           }
         ]
@@ -33,9 +33,16 @@
         "path": "frameworks",
         "version": "1.0.0",
         "groupId": "com.hezhihu.frameworks",
-        "module": {
-
-        }
+        "module": [
+          {
+            "id": "network",
+            "path": "network"
+          },
+          {
+            "id": "utils",
+            "path": "utils"
+          }
+        ]
       }
     ],
     "github": {
@@ -44,7 +51,8 @@
       "okHttp": "com.squareup.okhttp3:okhttp:4.9.3",
       "okHttpLogging": "com.squareup.okhttp3:logging-interceptor:4.9.3",
       "retrofit": "com.squareup.retrofit2:retrofit:2.9.0",
-      "rxJavaAdapter": "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
+      "rxJavaAdapter": "com.squareup.retrofit2:adapter-rxjava3:2.9.0",
+      "utilCode": "com.blankj:utilcodex:1.30.6"
     }
   }
 }
