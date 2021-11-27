@@ -3,13 +3,13 @@ package com.hezhihu.plugin.dependencies;
 import java.io.File;
 
 public class DepConfig {
-    public File dependenciesXml;
+    public File dependencies;
 
     public File getDependenciesXml() {
-        return dependenciesXml;
+        return dependencies;
     }
 
-    public void setDependenciesXml(File dependenciesXml) {
-        this.dependenciesXml = dependenciesXml;
+    public void setDependenciesXml(File dependencies) {
+        this.dependencies = dependencies;
     }
 }

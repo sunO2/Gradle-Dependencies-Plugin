@@ -1,7 +1,9 @@
 package com.hezhihu.plugin.dependencies
 
+import com.hezhihu.gradle.plugin.base.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.internal.project.DefaultProject
 import org.gradle.api.plugins.BasePluginConvention
 import java.lang.IllegalArgumentException
 
@@ -17,20 +19,46 @@ class DependenciesPlugin: Plugin<Project> {
         project.extensions.create("dependenciesConfig",DepConfig::class.java)
 
         project.afterEvaluate {
-            val dependenciesMap = project.extensions.getByType(DepConfig::class.java)
-                .dependenciesXml.xmlModule()
-
-            project.subprojects.forEach{ sub ->
-                sub.afterEvaluate{
-                    appendModule2Host(it,dependenciesMap)
-                    dependenciesAAR2Code(it,dependenciesMap)
+            project.extensions.getByType(DepConfig::class.java).dependencies.apply {
+                if(exists()){
+                    appFrameworkFromFile(this).apply {
+                        project.subprojects { subProject ->
+                            subProject.afterEvaluate {
+                                addDependencies2Project(it,this)
+                            }
+                        }
+                    }
                 }
-                applyVersionAndGroup(project,dependenciesMap)
+            }
+
+
+
+//            project.subprojects.forEach{ sub ->
+//                sub.afterEvaluate{
+//                    appendModule2Host(it,dependenciesMap)
+//                    dependenciesAAR2Code(it,dependenciesMap)
+//                }
+//                applyVersionAndGroup(project,dependenciesMap)
+//            }
+        }
+    }
+
+    /**
+     * 添加依赖到Project
+     */
+    private fun addDependencies2Project(project: Project, appFramework: APPFramework){
+        println("module：${project.name} 添加依赖")
+        val dependencies = appFramework.app.framework.toMap()
+        if(project is DefaultProject){
+            dependencies[project.identityPath.path]?.apply {
+                this.dependencies().keys.forEach{ dependenciesType ->
+                    dependencies()[dependenciesType]?.forEach { mavenId ->
+                        project.dependencies.add(dependenciesType,appFramework.maven.optString(mavenId))
+                        println("   ++++++ $dependenciesType ${appFramework.maven.optString(mavenId)}")
+                    }
+                }
             }
         }
-
-
-
     }
 
     private fun appendModule2Host(project: Project, dependenciesMap: Modules) {
@@ -45,36 +73,6 @@ class DependenciesPlugin: Plugin<Project> {
 //                project.configurations.getByName("implementation").apply {
 //                    dependencies.add(dependency)
 //                }
-            }
-        }
-    }
-
-    private fun applyVersionAndGroup(rootProject: Project, dependenciesMap: Modules){
-        dependenciesMap.mGroups.keys.forEach{ group ->
-            val groupPath = dependenciesMap.mGroups.get(key = group)?.path
-            val groupId = dependenciesMap.mGroups.get(key = group)?.id
-            val groupVersion = dependenciesMap.mGroups.get(key = group)?.version.toString()
-            val groupModules = dependenciesMap.mGroups.get(key = group)?.mModules
-            updateVersion(rootProject,":$groupId",group,groupVersion)
-
-            if(null != groupModules && null != groupPath){
-                groupModules.keys.forEach { moduleName  ->
-                    val moduleId = groupModules[moduleName]?.id.toString()
-                    updateVersion(rootProject,":$groupId:$moduleId",group,groupVersion)
-                }
-            }
-        }
-    }
-
-    /**
-     * 更新项目版本
-     */
-    private fun updateVersion(rootProject: Project,projectName: String, group: String, version: String){
-        rootProject.project(projectName).afterEvaluate{
-            it.group = group
-            it.version = version
-            it.convention.findPlugin(BasePluginConvention::class.java)?.apply {
-                archivesBaseName = it.name
             }
         }
     }
@@ -116,5 +114,18 @@ class DependenciesPlugin: Plugin<Project> {
                 println("准备替换模块后：${depends}")
             }
         }
+    }
+
+    private fun List<Framework>.toMap(): HashMap<String,Dependencies?>{
+        val map = hashMapOf<String,Dependencies?>()
+        forEach {
+            val groupId = it.id
+            map[":$groupId"] = it.dependencies
+            it.modules.forEach { module ->
+                val moduleId = module.id
+                map[":$groupId:$moduleId"] = module.dependencies
+            }
+        }
+        return map
     }
 }

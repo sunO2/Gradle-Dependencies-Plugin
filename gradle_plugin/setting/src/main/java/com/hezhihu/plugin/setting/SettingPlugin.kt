@@ -1,9 +1,7 @@
 package com.hezhihu.plugin.setting
 
-import com.google.gson.Gson
+import com.hezhihu.gradle.plugin.base.appFrameworkFromFile
 import freemarker.template.Template
-import groovy.util.Node
-import groovy.util.XmlParser
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
 import java.io.*
@@ -13,26 +11,11 @@ class SettingPlugin: Plugin<Settings>{
 
     override fun apply(settings: Settings) {
         settings.run {
-
-            FileReader(File(rootDir,"dependencies.json")).readText().run {
-                val app = Gson().fromJson(this,APPFramework::class.java)
-                app.app.framework[0].dependencies.dependencies()
-            }
-
-            XmlParser().parse(getDependenciesFile()).run {
-                children().forEach { group ->
-                    if(group is Node){
-                        val groupId = group.attribute("id")
-                        val groupPath = group.attribute("path")
-                        val groupName = group.attribute("group")
-                        includeGroup(groupId as String,groupName as String, groupPath as String)
-                        group.children().forEach{ module ->
-                            if(module is Node){
-                                val childId = module.attribute("id")
-                                val childPath = module.attribute("path")
-                                includeModule(childId as String,groupId,groupName,"$groupPath${File.separator}$childPath")
-                            }
-                        }
+            appFrameworkFromFile(File(rootDir,"dependencies.json")).apply {
+                app.framework.forEach{ group ->
+                    includeGroup(group.id,group.group,group.path)
+                    group.modules.forEach { module ->
+                        includeModule(module.id,group.id,group.group,"${group.path}${File.separator}${module.path}")
                     }
                 }
             }
@@ -46,7 +29,7 @@ class SettingPlugin: Plugin<Settings>{
         File(rootDir,path).run {
             createLibraryDir(id,group,this)
             include(":$id")
-            project(this)
+            project(":$id").projectDir = this
         }
     }
 
@@ -56,8 +39,10 @@ class SettingPlugin: Plugin<Settings>{
     private fun Settings.includeModule(id: String,groupId: String,group: String,path: String){
         File(rootDir,path).run {
             createLibraryDir(id,group,this)
-            include(":$groupId:$id")
-            project(this)
+            val include = ":$groupId:$id"
+            println("依赖： $include")
+            include(include)
+            project(include).projectDir = this
         }
     }
 
@@ -103,7 +88,6 @@ class SettingPlugin: Plugin<Settings>{
                 createFileFromTemplate(File(mainPath,"AndroidManifest.xml"), mapOf("packageName" to "$moduleGroup.$moduleID"),configuration.getTemplate(TemplateLoader.MANIFEST))
                 mainPath
             }.apply { ///创建java 文件夹
-
                 val javaPath = File(this,"java/${moduleGroup.replace(".","/")}.$moduleID")
                 javaPath.mkdirs()
 
@@ -123,11 +107,6 @@ class SettingPlugin: Plugin<Settings>{
                     File(this,it).mkdir()
                 }
             }
-
-            fun createGradleFile(){
-
-            }
-
         }
 
     }

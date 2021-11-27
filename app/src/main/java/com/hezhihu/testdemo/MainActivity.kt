@@ -13,7 +13,6 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.hezhihu.kotlin.KotlinDemoActivity
 import com.hezhihu.testdemo.aspectj.StaticClassTest
 import com.hezhihu.testdemo.booster.BoosterActivity
 import com.hezhihu.testdemo.dialog.DialogActivity
@@ -33,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         var data = arrayListOf(
             Item("booster",BoosterActivity::class.java),
             Item("Dialog", DialogActivity::class.java),
-            Item("Kotlin",KotlinDemoActivity::class.java),
-            Item("Rxjava",KotlinDemoActivity::class.java),
             Item("CrashTest",BoosterActivity::class.java)
         )
         TestFragment()

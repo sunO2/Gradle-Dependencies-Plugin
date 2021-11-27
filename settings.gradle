@@ -6,7 +6,6 @@ buildscript{
         maven {url new File(rootDir,"maven/m2")}
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies{
         classpath 'com.hezhihu.gradle.plugin:setting:1.0.0'
@@ -14,4 +13,5 @@ buildscript{
 }
 apply plugin: 'plugin.apply.setting'
 //include ':gradle_plugin:setting'
+//include ':gradle_plugin:base'
 
