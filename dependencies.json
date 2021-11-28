@@ -13,13 +13,16 @@
           {
             "id": "setting",
             "path": "setting"
-          },{
+          },
+          {
             "id": "apply-maven",
             "path": "applyMaven"
-          },{
+          },
+          {
             "id": "dependencies",
             "path": "dependencies"
-          },{
+          },
+          {
             "id": "base",
             "path": "base"
           }
