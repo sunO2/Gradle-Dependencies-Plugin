@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity() {
 //        }else{
 //            throw NullPointerException("崩溃测试")
 //        }
-        ARouter.getInstance().build("/app/home").navigation(this)
+//        ARouter.getInstance().build("/app/home").navigation(this)
+        ARouter.getInstance().build("/navigation/navigation").navigation(this)
         return "原生方法识别"
     }
 }
