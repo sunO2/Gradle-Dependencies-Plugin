@@ -43,6 +43,14 @@ public class Modules {
 
         String version;
 
+        public Group(String id, String group,String path, String version) {
+            this.group = group;
+            this.id = id;
+            this.path = path;
+            this.version = version;
+            mModules.put(id,new Module(":"+id,path));
+        }
+
         Map<String,Module> mModules = new HashMap<>();
 
         /**
@@ -51,6 +59,7 @@ public class Modules {
          */
         public void addModule(Module module) {
             mModules.put(module.id,module);
+            module.id = ":"+id+":"+module.id;
         }
 
         public boolean containsKey(@NotNull String dependencyName) {
@@ -63,12 +72,10 @@ public class Modules {
     }
 
     public static class Module{
-        boolean isApplication=false;
         String id;
         String path;
 
-        public Module(String id, String path,boolean isApplication) {
-            this.isApplication = isApplication;
+        public Module(String id, String path) {
             this.id = id;
             this.path = path;
         }
@@ -76,7 +83,6 @@ public class Modules {
         @Override
         public String toString() {
             return "Module{" +
-                    "isApplication=" + isApplication +
                     ", id='" + id + '\'' +
                     ", path='" + path + '\'' +
                     '}';

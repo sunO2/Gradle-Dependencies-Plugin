@@ -21,6 +21,7 @@ data class App(
 
 data class Framework(
     val dependencies: Dependencies?,
+    val allDependencies: Dependencies?,
     val group: String,
     val id: String,
     val modules: List<Module>,

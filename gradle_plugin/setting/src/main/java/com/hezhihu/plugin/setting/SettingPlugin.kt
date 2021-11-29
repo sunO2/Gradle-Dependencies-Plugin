@@ -39,7 +39,6 @@ class SettingPlugin: Plugin<Settings>{
         File(rootDir,path).run {
             createLibraryDir(id,group,this)
             val include = ":$groupId:$id"
-            println("依赖： $include")
             include(include)
             project(include).projectDir = this
         }

@@ -5,70 +5,31 @@
     },
     "framework": [
       {
-        "path": "gradle_plugin",
-        "version": "1.0.0",
-        "group": "com.hezhihu.gradle.plugin",
-        "id": "gradle",
-        "modules": [
-          {
-            "id": "setting",
-            "path": "setting"
-          },
-          {
-            "id": "apply-maven",
-            "path": "applyMaven"
-          },
-          {
-            "id": "dependencies",
-            "path": "dependencies"
-          },
-          {
-            "id": "base",
-            "path": "base"
-          }
-        ]
-      },
-      {
         "path": "modules",
         "version": "1.0.0",
         "id": "modules",
         "group": "com.hezhihu.module",
+        "allDependencies": {
+          "implementation": [
+            "appFramework"
+          ]
+        },
         "modules": [
           {
             "id": "homemodule",
-            "path": "home",
-            "dependencies": {
-              "implementation": [
-                "appFramework"
-              ]
-            }
+            "path": "home"
           },
           {
             "id": "loginmodule",
-            "path": "login",
-            "dependencies": {
-              "implementation": [
-                "appFramework"
-              ]
-            }
+            "path": "login"
           },
           {
             "id": "settingmodule",
-            "path": "setting",
-            "dependencies": {
-              "implementation": [
-                "appFramework"
-              ]
-            }
+            "path": "setting"
           },
           {
             "id": "launchermodule",
-            "path": "launcher",
-            "dependencies": {
-              "implementation": [
-                "appFramework"
-              ]
-            }
+            "path": "launcher"
           }
         ]
       },{

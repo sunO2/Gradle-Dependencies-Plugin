@@ -2,9 +2,6 @@
 apply plugin: 'plugin.apply.maven'
 //
 apply plugin: 'plugin.apply.dependencies'
-dependenciesConfig {
-    dependenciesXml file("dependencies.json")
-}
 
 buildscript {
     ext.kotlin_version = "1.5.20"
