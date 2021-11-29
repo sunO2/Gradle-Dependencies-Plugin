@@ -14,16 +14,16 @@ buildscript{
 }
 apply plugin: 'plugin.apply.setting'
 
-
-include ':gradle:setting'
-project(":gradle:setting").setProjectDir(new File(rootDir,"plugin/setting"))
-
-include ':gradle:base'
-project(":gradle:base").setProjectDir(new File(rootDir,"plugin/base"))
-
-include ':gradle:dependencies'
-project(":gradle:dependencies").setProjectDir(new File(rootDir,"plugin/dependencies"))
-
-include ':gradle:apply-maven'
-project(":gradle:apply-maven").setProjectDir(new File(rootDir,"plugin/applyMaven"))
+//
+//include ':gradle:setting'
+//project(":gradle:setting").setProjectDir(new File(rootDir,"plugin/setting"))
+//
+//include ':gradle:base'
+//project(":gradle:base").setProjectDir(new File(rootDir,"plugin/base"))
+//
+//include ':gradle:dependencies'
+//project(":gradle:dependencies").setProjectDir(new File(rootDir,"plugin/dependencies"))
+//
+//include ':gradle:apply-maven'
+//project(":gradle:apply-maven").setProjectDir(new File(rootDir,"plugin/applyMaven"))
 

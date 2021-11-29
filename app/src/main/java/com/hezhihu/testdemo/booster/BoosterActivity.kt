@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.hezhihu.testdemo.R
 import java.lang.Exception
 
@@ -16,17 +17,6 @@ class BoosterActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(LinearLayout(this))
-        ///验证 raw 问题
-        boostSourcesRaw()
     }
 
-
-    /**
-     * 验证 booster raw 获取
-     * 异常问题
-     */
-    private fun boostSourcesRaw(){
-        Log.d("BoosterActivity","boostSourcesRaw")
-        var fd = resources.openRawResourceFd(R.raw.test)
-    }
 }

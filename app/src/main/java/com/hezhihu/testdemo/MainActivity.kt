@@ -2,9 +2,7 @@ package com.hezhihu.testdemo
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +12,9 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.hezhihu.testdemo.aspectj.StaticClassTest
+import com.alibaba.android.arouter.launcher.ARouter
 import com.hezhihu.testdemo.booster.BoosterActivity
 import com.hezhihu.testdemo.dialog.DialogActivity
-import com.hezhihu.testdemo.fragment.TestFragment
-import retrofit2.Retrofit
-import java.lang.NullPointerException
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,14 +23,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         var data = arrayListOf(
             Item("booster",BoosterActivity::class.java),
             Item("Dialog", DialogActivity::class.java),
             Item("CrashTest",BoosterActivity::class.java)
         )
-        TestFragment()
-        Retrofit.Builder().baseUrl("http:router.my-nas.icu")
+
         Toast.makeText(this,packageName,Toast.LENGTH_LONG).show()
         findViewById<ListView>(R.id.list_item).adapter = object: BaseAdapter(){
             @SuppressLint("ViewHolder")
@@ -65,12 +60,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onItemClick(item: Item): String{
-        StaticClassTest().invoke()
-        if(!TextUtils.equals("CrashTest",item.name)) {
-            startActivity(Intent(this@MainActivity, item.activity))
-        }else{
-            throw NullPointerException("崩溃测试")
-        }
+//        StaticClassTest().invoke()
+//        if(!TextUtils.equals("CrashTest",item.name)) {
+//            startActivity(Intent(this@MainActivity, item.activity))
+//        }else{
+//            throw NullPointerException("崩溃测试")
+//        }
+        ARouter.getInstance().build("/app/home").navigation(this)
         return "原生方法识别"
     }
 }

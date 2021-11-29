@@ -27,8 +27,4 @@ class DialogActivity: AppCompatActivity() {
 
     }
 
-    fun testClick(view: View){
-
-    }
-
 }

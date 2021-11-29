@@ -14,6 +14,14 @@
             "appFramework"
           ]
         },
+        "dependencies": {
+          "implementation": [
+            "appHome",
+            "appLogin",
+            "appSetting",
+            "appLauncher"
+          ]
+        },
         "modules": [
           {
             "id": "homemodule",
@@ -40,7 +48,8 @@
         "dependencies": {
           "api": [
             "appNetWork",
-            "appUtils"
+            "appUtils",
+            "appNavigation"
           ]
         },
         "modules": [
@@ -95,7 +104,13 @@
   "maven": {
     "appNetWork": "com.hezhihu.framework:network:1.0.0",
     "appUtils": "com.hezhihu.framework:utils:1.0.0",
+    "appNavigation": "com.hezhihu.framework:navigation:1.0.0",
     "appFramework": "com.hezhihu.framework:frameworks:1.0.0",
+    "appModules": "com.hezhihu.module:modules:1.0.0",
+    "appHome": "com.hezhihu.module:homemodule:1.0.0",
+    "appLogin": "com.hezhihu.module:loginmodule:1.0.0",
+    "appSetting": "com.hezhihu.module:settingmodule:1.0.0",
+    "appLauncher": "com.hezhihu.module:launchermodule:1.0.0",
 
     "rxJava": "io.reactivex.rxjava3:rxjava:3.1.3",
     "rxAndroid": "io.reactivex.rxjava3:rxandroid:3.0.0",

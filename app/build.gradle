@@ -1,8 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'com.didiglobal.booster'
+apply plugin: 'kotlin-kapt'
 apply from: rootProject.file("keyStore.gradle")
-apply plugin: 'android-aspectjx'
+
+kapt {
+    arguments {
+        arg("AROUTER_MODULE_NAME", project.getName())
+    }
+}
 
 android {
     compileSdkVersion 30
@@ -53,22 +58,18 @@ android {
     }
 }
 
-aspectjx {
-//排除所有package路径中包含`android.support`的class文件及库（jar文件）
-    include '*'
-}
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.aspectj:aspectjrt:1.8.9'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.hezhihu.framework:frameworks:1.0.0'
+    implementation 'com.hezhihu.module:modules:1.0.0'
+    kapt 'com.alibaba:arouter-compiler:1.5.2'
 
 }

@@ -17,7 +17,7 @@ buildscript {
         classpath 'com.hezhihu.gradle.plugin:apply-maven:1.0.0'
         classpath 'com.hezhihu.gradle.plugin:dependencies:1.0.0'
 
-        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
+        classpath "com.alibaba:arouter-register:1.0.2"
     }
 }
 
