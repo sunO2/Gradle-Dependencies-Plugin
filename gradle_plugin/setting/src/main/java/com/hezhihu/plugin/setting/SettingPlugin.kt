@@ -10,11 +10,13 @@ class SettingPlugin: Plugin<Settings>{
 
     override fun apply(settings: Settings) {
         settings.run {
-            appFrameworkFromFile(File(rootDir,"dependencies.json")).apply {
-                app.framework.forEach{ group ->
-                    includeGroup(group.id,group.group,group.path)
-                    group.modules.forEach { module ->
-                        includeModule(module.id,group.id,group.group,"${group.path}${File.separator}${module.path}")
+            getDependenciesFile().apply {
+                appFrameworkFromFile(this).apply {
+                    app.framework.forEach{ group ->
+                        includeGroup(group.id,group.group,group.path)
+                        group.modules.forEach { module ->
+                            includeModule(module.id,group.id,group.group,"${group.path}${File.separator}${module.path}")
+                        }
                     }
                 }
             }
@@ -48,10 +50,10 @@ class SettingPlugin: Plugin<Settings>{
      * 获取依赖文件
      */
     private fun Settings.getDependenciesFile(): File {
-        val file = File(rootProject.projectDir, "dependencies.xml")
+        val file = File(rootProject.projectDir, "dependencies.json")
         if (!file.exists()) {
             println("没有文件")
-            SettingPlugin::class.java.getResource("/source/dependencies.xml")?.readText()?.apply {
+            SettingPlugin::class.java.getResource("/source/dependencies.json")?.readText()?.apply {
                 println("写入文件：${this}")
                 FileWriter(file).run {
                     write(this@apply)
