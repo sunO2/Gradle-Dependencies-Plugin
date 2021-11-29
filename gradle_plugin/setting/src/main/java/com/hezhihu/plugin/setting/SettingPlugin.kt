@@ -8,7 +8,6 @@ import java.io.*
 
 class SettingPlugin: Plugin<Settings>{
 
-
     override fun apply(settings: Settings) {
         settings.run {
             appFrameworkFromFile(File(rootDir,"dependencies.json")).apply {

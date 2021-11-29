@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,6 @@ import com.hezhihu.testdemo.aspectj.StaticClassTest
 import com.hezhihu.testdemo.booster.BoosterActivity
 import com.hezhihu.testdemo.dialog.DialogActivity
 import com.hezhihu.testdemo.fragment.TestFragment
-import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import java.lang.NullPointerException
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         TestFragment()
         Retrofit.Builder().baseUrl("http:router.my-nas.icu")
         Toast.makeText(this,packageName,Toast.LENGTH_LONG).show()
-        list_item.adapter = object: BaseAdapter(){
+        findViewById<ListView>(R.id.list_item).adapter = object: BaseAdapter(){
             @SuppressLint("ViewHolder")
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val item = LayoutInflater.from(this@MainActivity).inflate(R.layout.main_activity_item_layout,parent,false)

@@ -64,7 +64,8 @@ data class Dependencies(
 data class Module(
     val dependencies: Dependencies?,
     val id: String,
-    val path: String
+    val path: String,
+    val version: String?
 
 ) {
     override fun toString(): String {

@@ -6,10 +6,10 @@ apply plugin: 'maven'
 dependencies {
     api gradleApi()
     api localGroovy()
-    implementation 'com.android.tools.build:gradle:4.0.1'
     implementation "org.freemarker:freemarker:2.3.31"
+    implementation 'com.android.tools.build:gradle:4.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.hezhihu.gradle.plugin:base:1.0.0'
+    implementation project(":gradle:base")
 }
 
 group = 'com.hezhihu.gradle.plugin'

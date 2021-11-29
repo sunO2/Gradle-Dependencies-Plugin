@@ -5,6 +5,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.project.DefaultProject
 import org.gradle.api.plugins.BasePluginConvention
+import org.json.JSONObject
 import java.lang.IllegalArgumentException
 
 /**
@@ -18,20 +19,23 @@ class DependenciesPlugin: Plugin<Project> {
         }
         project.extensions.create("dependenciesConfig",DepConfig::class.java)
 
-        project.afterEvaluate {
+        project.afterEvaluate { rootProject ->
             project.extensions.getByType(DepConfig::class.java).dependencies.apply {
                 if(exists()){
                     appFrameworkFromFile(this).apply {
-                        project.subprojects { subProject ->
-                            subProject.afterEvaluate {
-                                addDependencies2Project(it,this)
+                        app.framework.forEach { framework ->
+                            val frameworkId = framework.id
+                            val frameworkProject = rootProject.getProject(":$frameworkId")
+                            addDependencies2Project(frameworkProject,framework.dependencies,maven)
+                            framework.modules.forEach { module ->
+                                val moduleId = module.id
+                                val moduleProject = rootProject.getProject(":$frameworkId:$moduleId")
+                                addDependencies2Project(moduleProject,module.dependencies,maven)
                             }
                         }
                     }
                 }
             }
-
-
 
 //            project.subprojects.forEach{ sub ->
 //                sub.afterEvaluate{
@@ -46,16 +50,15 @@ class DependenciesPlugin: Plugin<Project> {
     /**
      * 添加依赖到Project
      */
-    private fun addDependencies2Project(project: Project, appFramework: APPFramework){
-        println("module：${project.name} 添加依赖")
-        val dependencies = appFramework.app.framework.toMap()
-        if(project is DefaultProject){
-            dependencies[project.identityPath.path]?.apply {
-                this.dependencies().keys.forEach{ dependenciesType ->
-                    dependencies()[dependenciesType]?.forEach { mavenId ->
-                        project.dependencies.add(dependenciesType,appFramework.maven.optString(mavenId))
-                        println("   ++++++ $dependenciesType ${appFramework.maven.optString(mavenId)}")
-                    }
+    private fun addDependencies2Project(project: Project?,dependencies: Dependencies?,maven: JSONObject){
+        project?.afterEvaluate {
+            println("module：${project.name} 添加依赖")
+            val moduleDependencies = dependencies?.dependencies()
+            moduleDependencies?.keys?.forEach { dependenciesType ->
+                moduleDependencies[dependenciesType]?.forEach{ mavenId ->
+                    val mavenDependencies = maven.optString(mavenId)
+                    project.dependencies.add(dependenciesType,mavenDependencies)
+                    println("   ++++++ $dependenciesType $mavenDependencies}")
                 }
             }
         }
@@ -114,6 +117,18 @@ class DependenciesPlugin: Plugin<Project> {
                 println("准备替换模块后：${depends}")
             }
         }
+    }
+
+    /**
+     * 寻找模块
+     */
+    private fun Project.getProject(projectId: String): Project?{
+        try{
+            return rootProject.project(projectId)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+        return null
     }
 
     private fun List<Framework>.toMap(): HashMap<String,Dependencies?>{

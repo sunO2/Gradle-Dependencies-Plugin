@@ -3,6 +3,7 @@ apply plugin: 'kotlin'
 apply plugin: 'maven'
 
 dependencies {
+    api fileTree(dir: "libs", include: ["*.jar"])
     api gradleApi()
     api localGroovy()
     api 'com.google.code.gson:gson:2.8.9'
