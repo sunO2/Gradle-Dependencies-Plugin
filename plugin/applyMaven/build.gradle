@@ -6,7 +6,6 @@ dependencies {
     api gradleApi()
     api localGroovy()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.tools.build:gradle:4.0.1'
     implementation project(":gradle:base")
 }
 repositories {
