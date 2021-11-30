@@ -3,6 +3,8 @@ package com.hezhihu.plugin.dependencies
 import com.hezhihu.gradle.plugin.base.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.serviceOf
+import org.gradle.internal.logging.text.StyledTextOutput
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.json.JSONObject
 import java.lang.IllegalArgumentException
@@ -12,11 +14,13 @@ import java.lang.IllegalArgumentException
  */
 class DependenciesPlugin: Plugin<Project> {
 
+    private lateinit var out: StyledTextOutput
+
     override fun apply(project: Project) {
         if(project.rootProject != project){
             throw IllegalArgumentException("请将Plugin 依赖在 rootProject 模块下")
         }
-
+        out = project.serviceOf<org.gradle.internal.logging.text.StyledTextOutputFactory>().create("an-output")
         project.run {
             project.rootProject.file("dependencies.json").apply {
                 if(exists()){
@@ -62,7 +66,8 @@ class DependenciesPlugin: Plugin<Project> {
             moduleDependencies?.apply {///添加 kapt Plugin
                 it.addKotlinAPTtPlugin(dependencies)
             }?.apply { ///添加依赖到 模块
-                val log = LogUtil("添加依赖 {","}")
+
+                val log = LogUtil(out,"添加依赖 {","}")
                 keys.forEach { dependenciesType ->
                     moduleDependencies[dependenciesType]?.forEach{ mavenId ->
                         val mavenDependencies = maven.optString(mavenId)
@@ -70,7 +75,7 @@ class DependenciesPlugin: Plugin<Project> {
                         log.appendln("   ++++++ $dependenciesType $mavenDependencies")
                     }
                 }
-                log.print()
+                log.print(StyledTextOutput.Style.ProgressStatus)
             }
         }
     }
@@ -81,7 +86,7 @@ class DependenciesPlugin: Plugin<Project> {
     private fun Project.addKotlinAPTtPlugin(dependencies: Dependencies){
         if (dependencies.kapt?.isEmpty() == false){
             if(!pluginManager.hasPlugin("kotlin-kapt")){
-                val log = LogUtil("添加 Plugin {","}")
+                val log = LogUtil(out, "添加 Plugin {", "}")
 
                 pluginManager.apply("kotlin-kapt")
                 log.appendln("  apply plugin: 'kotlin-kapt'")
@@ -98,7 +103,7 @@ class DependenciesPlugin: Plugin<Project> {
                         it.setARouterKotlinAptParams()
                     }
                 }
-                log.print()
+                log.print(StyledTextOutput.Style.Success)
             }
         }
     }
@@ -106,7 +111,7 @@ class DependenciesPlugin: Plugin<Project> {
 
     private fun dependenciesAAR2Code(project: Project,dependenciesMap: Modules){
         project.afterEvaluate{
-            val log = LogUtil("替换模块 {","}")
+            val log = LogUtil(out, "替换模块 {", "}")
             it.configurations.forEach{ configuration ->
                 val depends = configuration.dependencies
                 val size = depends.size - 1
@@ -127,7 +132,7 @@ class DependenciesPlugin: Plugin<Project> {
                     }
                 }
             }
-            log.print()
+            log.print(StyledTextOutput.Style.SuccessHeader)
         }
     }
 

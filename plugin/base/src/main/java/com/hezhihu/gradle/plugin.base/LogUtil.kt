@@ -1,6 +1,9 @@
 package com.hezhihu.gradle.plugin.base
 
-class LogUtil(private val header: String, val foot: String) {
+import org.gradle.internal.logging.text.StyledTextOutput
+
+
+class LogUtil(val out: StyledTextOutput, private val header: String, val foot: String) {
     private val log: StringBuilder = StringBuilder()
     private var print = false
 
@@ -20,10 +23,10 @@ class LogUtil(private val header: String, val foot: String) {
         log.appendln()
     }
 
-    fun print(){
+    fun print(style: StyledTextOutput.Style){
         if(print) {
             append(foot)
-            println(log.toString())
+            out.style(style).println(log.toString())
         }
         log.clear()
     }
