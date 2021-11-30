@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.hezhihu.testdemo.R
 
+@Route(path = "/main/dialog")
 class DialogActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

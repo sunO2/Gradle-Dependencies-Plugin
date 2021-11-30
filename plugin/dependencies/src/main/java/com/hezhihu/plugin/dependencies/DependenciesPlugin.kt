@@ -3,8 +3,7 @@ package com.hezhihu.plugin.dependencies
 import com.hezhihu.gradle.plugin.base.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.internal.project.DefaultProject
-import org.gradle.api.plugins.BasePluginConvention
+import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import org.json.JSONObject
 import java.lang.IllegalArgumentException
 
@@ -21,9 +20,13 @@ class DependenciesPlugin: Plugin<Project> {
         project.run {
             project.rootProject.file("dependencies.json").apply {
                 if(exists()){
-                    appFrameworkFromFile(this).apply {
-                        app.framework.forEach { framework ->
+                    appFrameworkFromFile(this).apply { /// app Project  添加依赖
+                        val appProject = rootProject.getProject(":${app.host.id}")
+                        addDependencies2Project(appProject,app.host.dependencies,maven)
 
+                    }.apply { /// Project  添加依赖
+
+                        app.framework.forEach { framework ->
                             val frameworkId = framework.id
                             val frameworkProject = rootProject.getProject(":$frameworkId")
                             addDependencies2Project(frameworkProject,framework.dependencies,maven)
@@ -36,7 +39,8 @@ class DependenciesPlugin: Plugin<Project> {
                             }
                         }
 
-                        ///maven 依赖转换为源码依赖
+                    }.apply { ///maven 依赖转换为源码依赖
+
                         val modules = app.framework.toModules();
                         project.subprojects.forEach{ sub ->
                             sub.afterEvaluate{
@@ -55,7 +59,9 @@ class DependenciesPlugin: Plugin<Project> {
     private fun addDependencies2Project(project: Project?,dependencies: Dependencies?,maven: JSONObject){
         project?.afterEvaluate {
             val moduleDependencies = dependencies?.dependencies()
-            moduleDependencies?.apply {
+            moduleDependencies?.apply {///添加 kapt Plugin
+                it.addKotlinAPTtPlugin(dependencies)
+            }?.apply { ///添加依赖到 模块
                 val log = LogUtil("添加依赖 {","}")
                 keys.forEach { dependenciesType ->
                     moduleDependencies[dependenciesType]?.forEach{ mavenId ->
@@ -68,6 +74,35 @@ class DependenciesPlugin: Plugin<Project> {
             }
         }
     }
+
+    /**
+     * 添加kotlin apt 插件
+     */
+    private fun Project.addKotlinAPTtPlugin(dependencies: Dependencies){
+        if (dependencies.kapt?.isEmpty() == false){
+            if(!pluginManager.hasPlugin("kotlin-kapt")){
+                val log = LogUtil("添加 Plugin {","}")
+
+                pluginManager.apply("kotlin-kapt")
+                log.appendln("  apply plugin: 'kotlin-kapt'")
+                ///添加插件参数
+                fun KaptExtension.setARouterKotlinAptParams(){
+                    arguments {
+                        arg("AROUTER_MODULE_NAME",name)
+                    }
+                }
+                extensions.findByType(KaptExtension::class.java)?.apply {
+                    setARouterKotlinAptParams()
+                }?:apply{
+                    extensions.configure(KaptExtension::class.java){
+                        it.setARouterKotlinAptParams()
+                    }
+                }
+                log.print()
+            }
+        }
+    }
+
 
     private fun dependenciesAAR2Code(project: Project,dependenciesMap: Modules){
         project.afterEvaluate{

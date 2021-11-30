@@ -2,7 +2,7 @@
     package="com.hezhihu.module.settingmodule">
 
     <application>
-
+        <activity android:name=".SettingActivity"/>
     </application>
 
 </manifest>

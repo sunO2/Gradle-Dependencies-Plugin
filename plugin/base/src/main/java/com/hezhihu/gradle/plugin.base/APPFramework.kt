@@ -12,7 +12,7 @@ data class APPFramework(
 
 data class App(
     val framework: List<Framework>,
-    val host: Host
+    val host: Host,
 ) {
     override fun toString(): String {
         return "App(framework=$framework, host=$host)"
@@ -34,17 +34,20 @@ data class Framework(
 }
 
 data class Host(
-    val path: String
+    val path: String,
+    val id: String,
+    val dependencies: Dependencies?
 
 ) {
     override fun toString(): String {
-        return "Host(path='$path')"
+        return "Host(path='$path', id='$id', dependencies=$dependencies)"
     }
 }
 
 data class Dependencies(
     val api: List<String>?,
-    val implementation: List<String>?
+    val implementation: List<String>?,
+    val kapt: List<String>?
 
 ) {
     override fun toString(): String {
@@ -57,7 +60,8 @@ data class Dependencies(
     fun dependencies(): Map<String,List<String>>{
         return mapOf(
             "api" to (api ?: arrayListOf()),
-            "implementation" to (implementation ?: arrayListOf())
+            "implementation" to (implementation ?: arrayListOf()),
+            "kapt" to (kapt ?: arrayListOf())
         )
     }
 }

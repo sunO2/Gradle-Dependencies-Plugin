@@ -3,6 +3,7 @@ package com.hezhihu.testdemo
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,22 +14,27 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.launcher.ARouter
+import com.blankj.utilcode.util.SizeUtils
+import com.hezhihu.testdemo.aspectj.StaticClassTest
 import com.hezhihu.testdemo.booster.BoosterActivity
 import com.hezhihu.testdemo.dialog.DialogActivity
 
 class MainActivity : AppCompatActivity() {
 
-    class Item(var name: String,var activity: Class<out Activity>){
+    class Item(var name: String,var activity: String){
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-        var data = arrayListOf(
-            Item("booster",BoosterActivity::class.java),
-            Item("Dialog", DialogActivity::class.java),
-            Item("CrashTest",BoosterActivity::class.java)
+        val data = arrayListOf(
+            Item("booster","/main/booster"),
+            Item("Dialog", "/main/dialog"),
+            Item("home", "/app/home"),
+            Item("setting", "/setting/home"),
+            Item("navigation", "/navigation/home"),
+            Item("CrashTest","crash")
         )
 
         Toast.makeText(this,packageName,Toast.LENGTH_LONG).show()
@@ -60,14 +66,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onItemClick(item: Item): String{
-//        StaticClassTest().invoke()
-//        if(!TextUtils.equals("CrashTest",item.name)) {
-//            startActivity(Intent(this@MainActivity, item.activity))
-//        }else{
-//            throw NullPointerException("崩溃测试")
-//        }
-//        ARouter.getInstance().build("/app/home").navigation(this)
-        ARouter.getInstance().build("/navigation/navigation").navigation(this)
+        StaticClassTest().invoke()
+        if(!TextUtils.equals("CrashTest",item.name)) {
+            ARouter.getInstance().build(item.activity).navigation(this)
+        }else{
+            throw NullPointerException("崩溃测试")
+        }
         return "原生方法识别"
     }
 }

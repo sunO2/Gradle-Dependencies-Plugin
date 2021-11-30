@@ -1,7 +1,17 @@
 {
   "app": {
     "host": {
-      "path": "./app"
+      "path": "./app",
+      "id": "app",
+      "dependencies": {
+        "kapt": [
+          "aRouter-compiler"
+        ],
+        "implementation": [
+          "appFramework",
+          "appModules"
+        ]
+      }
     },
     "framework": [
       {
@@ -12,6 +22,9 @@
         "allDependencies": {
           "implementation": [
             "appFramework"
+          ],
+          "kapt": [
+            "aRouter-compiler"
           ]
         },
         "dependencies": {

@@ -1,13 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply from: rootProject.file("keyStore.gradle")
 
-kapt {
-    arguments {
-        arg("AROUTER_MODULE_NAME", project.getName())
-    }
-}
 
 android {
     compileSdkVersion 30
@@ -70,6 +64,4 @@ dependencies {
 
     implementation 'com.hezhihu.framework:frameworks:1.0.0'
     implementation 'com.hezhihu.module:modules:1.0.0'
-    kapt 'com.alibaba:arouter-compiler:1.5.2'
-
 }
