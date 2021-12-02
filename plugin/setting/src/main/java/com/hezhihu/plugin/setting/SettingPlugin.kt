@@ -1,6 +1,9 @@
 package com.hezhihu.plugin.setting
 
+import com.hezhihu.gradle.plugin.base.Framework
+import com.hezhihu.gradle.plugin.base.GitInfo
 import com.hezhihu.gradle.plugin.base.appFrameworkFromFile
+import com.hezhihu.plugin.setting.repo.GitUtils
 import freemarker.template.Template
 import org.gradle.api.Plugin
 import org.gradle.api.initialization.Settings
@@ -13,7 +16,7 @@ class SettingPlugin: Plugin<Settings>{
             getDependenciesFile().apply {
                 appFrameworkFromFile(this).apply {
                     app.framework.forEach{ group ->
-                        includeGroup(group.id,group.group,group.path)
+                        includeGroup(group)
                         group.modules.forEach { module ->
                             includeModule(module.id,group.id,group.group,"${group.path}${File.separator}${module.path}")
                         }
@@ -26,11 +29,37 @@ class SettingPlugin: Plugin<Settings>{
     /**
      * 集成group
      */
-    private fun Settings.includeGroup(id: String,group: String,path: String){
+    private fun Settings.includeGroup(framework: Framework){
+        val id = framework.id
+        val group = framework.group
+        val path = framework.path
         File(rootDir,path).run {
-            createLibraryDir(id,group,this)
+            val gitInfo = framework.git
+            if(null != gitInfo){
+                handlerModuleGitDir(gitInfo)
+            }else{
+                createLibraryDir(id,group,this)
+            }
             include(":$id")
             project(":$id").projectDir = this
+        }
+    }
+
+    private fun File.handlerModuleGitDir(gitInfo: GitInfo){
+        if(exists()){
+
+        }else{
+            ///文件不存在就创建一个文件夹
+            mkdirs()
+            val originUrl = gitInfo.fetch
+            val pushUrl = gitInfo.push ?: originUrl
+            val branch = gitInfo.branch
+            println("[repo] - module '$': git clone $originUrl --branch $branch")
+            GitUtils.clone(this, originUrl, branch)
+            if(originUrl != pushUrl){
+                GitUtils.setOriginRemotePushUrl(this, pushUrl)
+            }
+            GitUtils.addExclude(this)
         }
     }
 

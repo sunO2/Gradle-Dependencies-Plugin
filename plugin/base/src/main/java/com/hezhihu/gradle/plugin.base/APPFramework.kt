@@ -20,6 +20,7 @@ data class App(
 }
 
 data class Framework(
+    val git: GitInfo?,
     val dependencies: Dependencies?,
     val allDependencies: Dependencies?,
     val group: String,
@@ -67,6 +68,7 @@ data class Dependencies(
 }
 
 data class Module(
+    val git: GitInfo?,
     val dependencies: Dependencies?,
     val id: String,
     val path: String,
@@ -77,6 +79,12 @@ data class Module(
         return "Module(dependencies=$dependencies, id='$id', path='$path')"
     }
 }
+
+data class GitInfo(
+    val fetch: String,
+    val push: String?,
+    val branch: String,
+)
 
 fun <T>T.appFrameworkFromFile(filePath: File): APPFramework{
     return FileReader(filePath).readText().run {
