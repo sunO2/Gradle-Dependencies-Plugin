@@ -38,7 +38,11 @@
         "modules": [
           {
             "id": "homemodule",
-            "path": "home"
+            "path": "home",
+            "git": {
+              "fetch": "https://github.com/sunO2/home.git",
+              "branch": "main"
+            }
           },
           {
             "id": "loginmodule",

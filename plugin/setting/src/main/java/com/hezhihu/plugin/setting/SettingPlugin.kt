@@ -2,6 +2,7 @@ package com.hezhihu.plugin.setting
 
 import com.hezhihu.gradle.plugin.base.Framework
 import com.hezhihu.gradle.plugin.base.GitInfo
+import com.hezhihu.gradle.plugin.base.Module
 import com.hezhihu.gradle.plugin.base.appFrameworkFromFile
 import com.hezhihu.plugin.setting.repo.GitUtils
 import freemarker.template.Template
@@ -18,7 +19,7 @@ class SettingPlugin: Plugin<Settings>{
                     app.framework.forEach{ group ->
                         includeGroup(group)
                         group.modules.forEach { module ->
-                            includeModule(module.id,group.id,group.group,"${group.path}${File.separator}${module.path}")
+                            includeModule(module,group)
                         }
                     }
                 }
@@ -36,7 +37,7 @@ class SettingPlugin: Plugin<Settings>{
         File(rootDir,path).run {
             val gitInfo = framework.git
             if(null != gitInfo){
-                handlerModuleGitDir(gitInfo)
+                handlerModuleGitDir(this@includeGroup,gitInfo)
             }else{
                 createLibraryDir(id,group,this)
             }
@@ -45,9 +46,47 @@ class SettingPlugin: Plugin<Settings>{
         }
     }
 
-    private fun File.handlerModuleGitDir(gitInfo: GitInfo){
+    private fun File.handlerModuleGitDir(settings: Settings,gitInfo: GitInfo){
         if(exists()){
+            GitUtils.removeCachedDir(settings.rootProject.projectDir, this.canonicalPath)
+            val moduleGitInitialized = GitUtils.isGitDir(this)
+            if(moduleGitInitialized){
+                setRemote(this,gitInfo)
+                val branch = gitInfo.branch
+                val currentBranch = GitUtils.getBranchName(this)
+                println("当前 currentBranch $currentBranch")
+                if(branch != currentBranch){
+                    val isClean = GitUtils.isClean(this)
+                    if(isClean){
+                        if(GitUtils.isLocalBranch(this,branch)){
+                            GitUtils.checkoutBranch(this,branch)
+                            println("[repo] - module '$this': git checkout $branch")
+                        }else{
+                            if(GitUtils.isRemoteBranch(this,branch)){
+                                GitUtils.checkoutRemoteBranch(this,branch)
+                                println("[repo] - module '$this': git checkout -b $branch origin/$branch")
+                            }else{
+                                GitUtils.checkoutNewBranch(this,branch)
+                                println("[repo] - module '$this': git checkout -b $branch")
+                            }
+                        }
+                    }
+                }
+            }else{
+                val originUrl = gitInfo.fetch
+                if(list().isNotEmpty()){
+                    GitUtils.init(this)
+                    GitUtils.addRemote(this,originUrl)
 
+                }else{
+                    println("[repo] - module ${this.name}': git clone $originUrl --branch ${gitInfo.branch}")
+                    GitUtils.clone(this,originUrl,gitInfo.branch)
+                }
+                if(null != gitInfo.push && gitInfo.push != originUrl){
+                    GitUtils.setOriginRemotePushUrl(this, gitInfo.push!!)
+                }
+                GitUtils.addExclude(this)
+            }
         }else{
             ///文件不存在就创建一个文件夹
             mkdirs()
@@ -66,9 +105,18 @@ class SettingPlugin: Plugin<Settings>{
     /**
      * 集成自模块
      */
-    private fun Settings.includeModule(id: String,groupId: String,group: String,path: String){
+    private fun Settings.includeModule(module: Module,frameworkGroup: Framework){
+        val id = module.id
+        val groupId = frameworkGroup.id
+        val group = frameworkGroup.group
+        val path = "${frameworkGroup.path}${File.separator}${module.path}"
         File(rootDir,path).run {
-            createLibraryDir(id,group,this)
+            val gitInfo = module.git
+            if(null != gitInfo){
+                handlerModuleGitDir(this@includeModule,gitInfo)
+            }else {
+                createLibraryDir(id, group, this)
+            }
             val include = ":$groupId:$id"
             include(include)
             project(include).projectDir = this
@@ -153,4 +201,24 @@ class SettingPlugin: Plugin<Settings>{
         out.flush()
         out.close()
     }
+
+    fun setRemote(dir: File,gitInfo: GitInfo?){
+        if(null == gitInfo){
+            GitUtils.removeRemote(dir)
+            return
+        }
+
+        val fetchUrl = GitUtils.getOriginRemoteFetchUrl(dir)
+        if(fetchUrl == null){
+            GitUtils.addRemote(dir,gitInfo.fetch)
+        }else if(gitInfo.fetch != fetchUrl){
+            GitUtils.setOriginRemoteUrl(dir,gitInfo.fetch)
+        }
+
+        val pushUrl = GitUtils.getOriginRemotePushUrl(dir)
+        if(null != pushUrl && pushUrl != gitInfo.push){
+            GitUtils.setOriginRemotePushUrl(dir,pushUrl)
+        }
+    }
+
 }
