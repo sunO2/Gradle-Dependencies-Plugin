@@ -6,7 +6,7 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation project(":gradle:base")
+    implementation project(":plugin:base")
 }
 repositories {
     mavenCentral()

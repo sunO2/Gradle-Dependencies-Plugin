@@ -8,7 +8,7 @@ dependencies {
     implementation localGroovy()
     implementation "org.freemarker:freemarker:2.3.31"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation project(":gradle:base")
+    implementation project(":plugin:base")
 }
 
 group = 'com.hezhihu.gradle.plugin'

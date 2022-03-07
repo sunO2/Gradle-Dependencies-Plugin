@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply plugin: 'plugin.apply.maven'
-apply plugin: 'plugin.apply.dependencies'
+//apply plugin: 'plugin.apply.maven'
+//apply plugin: 'plugin.apply.dependencies'
 
 buildscript {
     ext.kotlin_version = "1.5.20"
@@ -14,8 +14,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.hezhihu.gradle.plugin:apply-maven:1.0.0'
-        classpath 'com.hezhihu.gradle.plugin:dependencies:1.0.0'
+//        classpath 'com.hezhihu.gradle.plugin:apply-maven:1.0.0'
+//        classpath 'com.hezhihu.gradle.plugin:dependencies:1.0.0'
 
         classpath "com.alibaba:arouter-register:1.0.2"
     }
