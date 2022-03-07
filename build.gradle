@@ -4,6 +4,7 @@
 
 buildscript {
     ext.kotlin_version = "1.5.20"
+    ext.plugin_version = "1.0.7"
     repositories {
         maven {url rootProject.file("maven/m2")}
         mavenLocal()
