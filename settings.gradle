@@ -1,5 +1,5 @@
 rootProject.name = "TestDemo"
-include ':app'
+//include ':app'
 
 //
 //buildscript{
