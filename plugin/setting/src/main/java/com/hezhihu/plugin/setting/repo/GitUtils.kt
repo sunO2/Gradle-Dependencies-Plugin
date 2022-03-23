@@ -30,7 +30,7 @@ class GitUtils {
         }
 
         private fun String.readLines(): List<String>{
-            return StringGroovyMethods.readLines(this)
+            return StringGroovyMethods.readLines(this as CharSequence)
         }
         
         fun init(dir: File) {
