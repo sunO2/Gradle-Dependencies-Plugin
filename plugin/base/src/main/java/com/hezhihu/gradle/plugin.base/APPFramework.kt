@@ -48,7 +48,8 @@ data class Host(
 data class Dependencies(
     val api: List<String>?,
     val implementation: List<String>?,
-    val kapt: List<String>?
+    val kapt: List<String>?,
+    val compileOnly: List<String>?
 
 ) {
     override fun toString(): String {
@@ -62,7 +63,8 @@ data class Dependencies(
         return mapOf(
             "api" to (api ?: arrayListOf()),
             "implementation" to (implementation ?: arrayListOf()),
-            "kapt" to (kapt ?: arrayListOf())
+            "kapt" to (kapt ?: arrayListOf()),
+            "compileOnly" to (compileOnly ?: arrayListOf())
         )
     }
 }
